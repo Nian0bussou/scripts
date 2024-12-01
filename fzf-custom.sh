@@ -18,23 +18,32 @@ if [ ! -d "$start_path" ]; then
     echo "Error: '$start_path' is not a valid directory."
     exit 1
 fi
-find "$1" -type d -path '*/.git' -prune -o -print
 
-# Select based on the mode
-if [ "$mode" = "directories" ]; then
-    selection=$(find "$start_path" -type d \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -print | fzf)
-elif [ "$mode" = "files" ]; then
-    selection=$(find "$start_path" -type f \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -print | fzf)
-fi
+while true; do
+    # Select mode for fzf
+    if [ "$mode" = "directories" ]; then
+        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type d -print | fzf)
+    elif [ "$mode" = "files" ]; then
+        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type f -print | fzf)
+    fi
 
-# Trim whitespace from the selection
-selection=$(echo "$selection" | xargs)
+    # Trim whitespace from the selection
+    selection=$(echo "$selection" | xargs)
 
-# Check if selection is empty
-if [ -z "$selection" ]; then
-    echo "No selection made. Exiting."
-    exit 0
-fi
+    # Check if selection is empty
+    if [ -z "$selection" ]; then
+        echo "Exiting fzf."
+        break
+    fi
 
-# Open the selection in nvim
-$HOME/.local/bin/lvim "$selection"
+    # Open the selection in vim
+    $HOME/.local/bin/lvim "$selection"
+
+    # Prompt the user to continue or exit
+    echo "Press Enter to return to fzf, or type 'q' to quit:"
+    read -r choice
+    if [ "$choice" = "q" ]; then
+        echo "Exiting."
+        break
+    fi
+done
