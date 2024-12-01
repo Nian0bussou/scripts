@@ -22,9 +22,9 @@ fi
 while true; do
     # Select mode for fzf
     if [ "$mode" = "directories" ]; then
-        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type d -print | fzf)
+        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type d -print | fzf --preview 'cat {} ')
     elif [ "$mode" = "files" ]; then
-        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type f -print | fzf)
+        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type f -print | fzf --preview 'cat {} ')
     fi
 
     # Trim whitespace from the selection
