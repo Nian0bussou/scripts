@@ -19,7 +19,6 @@ if [ ! -d "$start_path" ]; then
     exit 1
 fi
 
-
 while true; do
     # Select mode for fzf
     if [ "$mode" = "directories" ]; then
@@ -39,12 +38,4 @@ while true; do
 
     # Open the selection in vim
     $HOME/.local/bin/lvim "$selection"
-
-    # Prompt the user to continue or exit
-    echo "Press Enter to return to fzf, or type 'q' to quit:"
-    read -r choice
-    if [ "$choice" = "q" ]; then
-        echo "Exiting."
-        break
-    fi
 done
