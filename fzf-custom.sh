@@ -19,12 +19,13 @@ if [ ! -d "$start_path" ]; then
     exit 1
 fi
 
+
 while true; do
     # Select mode for fzf
     if [ "$mode" = "directories" ]; then
-        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type d -print | fzf --preview 'cat {} ')
+        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type d -print | fzf --preview "batcat --color=always --style=numbers --line-range=:500 {}")
     elif [ "$mode" = "files" ]; then
-        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type f -print | fzf --preview 'cat {} ')
+        selection=$(find "$start_path" \( -path '*/.git' -o -path '*/.obsidian' \) -prune -o -type f -print | fzf --preview "batcat --color=always --style=numbers --line-range=:500 {}")
     fi
 
     # Trim whitespace from the selection
